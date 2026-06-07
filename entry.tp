@@ -1,0 +1,567 @@
+{
+  "api": 10,
+  "version": 100,
+  "name": "Walhalla Twitch Stream Monitor",
+  "id": "odin23x.walhalla_twitch_stream_monitor",
+  "configuration": {
+    "colorDark": "#1a0a2e",
+    "colorLight": "#9147ff",
+    "parentCategory": "streaming"
+  },
+  "plugin_start_cmd_windows": "powershell.exe -ExecutionPolicy Bypass -NoProfile -File \"%TP_PLUGIN_FOLDER%WalhallaTwitchStreamMonitor\\WalhallaTwitchStreamMonitor.ps1\"",
+  "settings": [
+    {
+      "name": "Twitch Client ID",
+      "type": "text",
+      "default": "",
+      "readOnly": false
+    },
+    {
+      "name": "Twitch User Access Token",
+      "type": "text",
+      "default": "",
+      "isPassword": true,
+      "readOnly": false
+    },
+    {
+      "name": "Update Interval Seconds",
+      "type": "number",
+      "default": "120",
+      "minValue": 30,
+      "maxValue": 3600,
+      "readOnly": false
+    },
+    {
+      "name": "Max Slots",
+      "type": "number",
+      "default": "10",
+      "minValue": 1,
+      "maxValue": 10,
+      "readOnly": false
+    }
+  ],
+  "categories": [
+    {
+      "id": "odin23x.walhalla_twitch_stream_monitor.cat.main",
+      "name": "Walhalla | Twitch Stream Monitor",
+      "actions": [
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.act.refresh",
+          "name": "Refresh now",
+          "prefix": "Stream Monitor",
+          "type": "communicate",
+          "format": "Streamer-Liste jetzt aktualisieren",
+          "description": "Erzwingt sofortigen Twitch API Check.",
+          "tryInline": true,
+          "data": [
+            {
+              "id": "odin23x.walhalla_twitch_stream_monitor.act.refresh.dummy",
+              "type": "text",
+              "label": "unused",
+              "default": ""
+            }
+          ]
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.act.toggle_autoupdate",
+          "name": "Auto-Update umschalten",
+          "prefix": "Stream Monitor",
+          "type": "communicate",
+          "format": "Auto-Update AN/AUS schalten",
+          "description": "Schaltet das automatische Intervall-Update um.",
+          "tryInline": true,
+          "data": [
+            {
+              "id": "odin23x.walhalla_twitch_stream_monitor.act.toggle_autoupdate.dummy",
+              "type": "text",
+              "label": "unused",
+              "default": ""
+            }
+          ]
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.act.open_file",
+          "name": "Streamers-Datei öffnen",
+          "prefix": "Stream Monitor",
+          "type": "communicate",
+          "format": "streamers.txt in Editor öffnen",
+          "description": "Öffnet die streamers.txt in Notepad zum Bearbeiten.",
+          "tryInline": true,
+          "data": [
+            {
+              "id": "odin23x.walhalla_twitch_stream_monitor.act.open_file.dummy",
+              "type": "text",
+              "label": "unused",
+              "default": ""
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.summary.online_count",
+          "type": "text",
+          "desc": "Monitor | Streams Online",
+          "default": "0"
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.summary.total_count",
+          "type": "text",
+          "desc": "Monitor | Streams Gesamt",
+          "default": "0"
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.summary.autoupdate",
+          "type": "text",
+          "desc": "Monitor | Auto-Update (AN/AUS)",
+          "default": "AN"
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.summary.next_update",
+          "type": "text",
+          "desc": "Monitor | Nächstes Update",
+          "default": "-"
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.summary.last_update",
+          "type": "text",
+          "desc": "Monitor | Letztes Update",
+          "default": "-"
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.summary.status",
+          "type": "text",
+          "desc": "Monitor | Status",
+          "default": "Starting"
+        }
+      ]
+    },
+    {
+      "id": "odin23x.walhalla_twitch_stream_monitor.cat.slots",
+      "name": "Walhalla | Stream Slots",
+      "actions": [],
+      "states": [
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_1.user_name",
+          "type": "text",
+          "desc": "Stream 01 | Username",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_1.game_name",
+          "type": "text",
+          "desc": "Stream 01 | Spiel",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_1.title",
+          "type": "text",
+          "desc": "Stream 01 | Titel",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_1.viewer_count",
+          "type": "text",
+          "desc": "Stream 01 | Zuschauer",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_1.is_live",
+          "type": "text",
+          "desc": "Stream 01 | Live (TRUE/FALSE)",
+          "default": "FALSE"
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_1.uptime",
+          "type": "text",
+          "desc": "Stream 01 | Laufzeit",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_1.is_mature",
+          "type": "text",
+          "desc": "Stream 01 | 18+ (TRUE/FALSE)",
+          "default": "FALSE"
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_2.user_name",
+          "type": "text",
+          "desc": "Stream 02 | Username",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_2.game_name",
+          "type": "text",
+          "desc": "Stream 02 | Spiel",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_2.title",
+          "type": "text",
+          "desc": "Stream 02 | Titel",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_2.viewer_count",
+          "type": "text",
+          "desc": "Stream 02 | Zuschauer",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_2.is_live",
+          "type": "text",
+          "desc": "Stream 02 | Live (TRUE/FALSE)",
+          "default": "FALSE"
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_2.uptime",
+          "type": "text",
+          "desc": "Stream 02 | Laufzeit",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_2.is_mature",
+          "type": "text",
+          "desc": "Stream 02 | 18+ (TRUE/FALSE)",
+          "default": "FALSE"
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_3.user_name",
+          "type": "text",
+          "desc": "Stream 03 | Username",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_3.game_name",
+          "type": "text",
+          "desc": "Stream 03 | Spiel",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_3.title",
+          "type": "text",
+          "desc": "Stream 03 | Titel",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_3.viewer_count",
+          "type": "text",
+          "desc": "Stream 03 | Zuschauer",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_3.is_live",
+          "type": "text",
+          "desc": "Stream 03 | Live (TRUE/FALSE)",
+          "default": "FALSE"
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_3.uptime",
+          "type": "text",
+          "desc": "Stream 03 | Laufzeit",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_3.is_mature",
+          "type": "text",
+          "desc": "Stream 03 | 18+ (TRUE/FALSE)",
+          "default": "FALSE"
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_4.user_name",
+          "type": "text",
+          "desc": "Stream 04 | Username",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_4.game_name",
+          "type": "text",
+          "desc": "Stream 04 | Spiel",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_4.title",
+          "type": "text",
+          "desc": "Stream 04 | Titel",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_4.viewer_count",
+          "type": "text",
+          "desc": "Stream 04 | Zuschauer",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_4.is_live",
+          "type": "text",
+          "desc": "Stream 04 | Live (TRUE/FALSE)",
+          "default": "FALSE"
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_4.uptime",
+          "type": "text",
+          "desc": "Stream 04 | Laufzeit",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_4.is_mature",
+          "type": "text",
+          "desc": "Stream 04 | 18+ (TRUE/FALSE)",
+          "default": "FALSE"
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_5.user_name",
+          "type": "text",
+          "desc": "Stream 05 | Username",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_5.game_name",
+          "type": "text",
+          "desc": "Stream 05 | Spiel",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_5.title",
+          "type": "text",
+          "desc": "Stream 05 | Titel",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_5.viewer_count",
+          "type": "text",
+          "desc": "Stream 05 | Zuschauer",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_5.is_live",
+          "type": "text",
+          "desc": "Stream 05 | Live (TRUE/FALSE)",
+          "default": "FALSE"
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_5.uptime",
+          "type": "text",
+          "desc": "Stream 05 | Laufzeit",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_5.is_mature",
+          "type": "text",
+          "desc": "Stream 05 | 18+ (TRUE/FALSE)",
+          "default": "FALSE"
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_6.user_name",
+          "type": "text",
+          "desc": "Stream 06 | Username",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_6.game_name",
+          "type": "text",
+          "desc": "Stream 06 | Spiel",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_6.title",
+          "type": "text",
+          "desc": "Stream 06 | Titel",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_6.viewer_count",
+          "type": "text",
+          "desc": "Stream 06 | Zuschauer",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_6.is_live",
+          "type": "text",
+          "desc": "Stream 06 | Live (TRUE/FALSE)",
+          "default": "FALSE"
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_6.uptime",
+          "type": "text",
+          "desc": "Stream 06 | Laufzeit",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_6.is_mature",
+          "type": "text",
+          "desc": "Stream 06 | 18+ (TRUE/FALSE)",
+          "default": "FALSE"
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_7.user_name",
+          "type": "text",
+          "desc": "Stream 07 | Username",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_7.game_name",
+          "type": "text",
+          "desc": "Stream 07 | Spiel",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_7.title",
+          "type": "text",
+          "desc": "Stream 07 | Titel",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_7.viewer_count",
+          "type": "text",
+          "desc": "Stream 07 | Zuschauer",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_7.is_live",
+          "type": "text",
+          "desc": "Stream 07 | Live (TRUE/FALSE)",
+          "default": "FALSE"
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_7.uptime",
+          "type": "text",
+          "desc": "Stream 07 | Laufzeit",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_7.is_mature",
+          "type": "text",
+          "desc": "Stream 07 | 18+ (TRUE/FALSE)",
+          "default": "FALSE"
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_8.user_name",
+          "type": "text",
+          "desc": "Stream 08 | Username",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_8.game_name",
+          "type": "text",
+          "desc": "Stream 08 | Spiel",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_8.title",
+          "type": "text",
+          "desc": "Stream 08 | Titel",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_8.viewer_count",
+          "type": "text",
+          "desc": "Stream 08 | Zuschauer",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_8.is_live",
+          "type": "text",
+          "desc": "Stream 08 | Live (TRUE/FALSE)",
+          "default": "FALSE"
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_8.uptime",
+          "type": "text",
+          "desc": "Stream 08 | Laufzeit",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_8.is_mature",
+          "type": "text",
+          "desc": "Stream 08 | 18+ (TRUE/FALSE)",
+          "default": "FALSE"
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_9.user_name",
+          "type": "text",
+          "desc": "Stream 09 | Username",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_9.game_name",
+          "type": "text",
+          "desc": "Stream 09 | Spiel",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_9.title",
+          "type": "text",
+          "desc": "Stream 09 | Titel",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_9.viewer_count",
+          "type": "text",
+          "desc": "Stream 09 | Zuschauer",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_9.is_live",
+          "type": "text",
+          "desc": "Stream 09 | Live (TRUE/FALSE)",
+          "default": "FALSE"
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_9.uptime",
+          "type": "text",
+          "desc": "Stream 09 | Laufzeit",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_9.is_mature",
+          "type": "text",
+          "desc": "Stream 09 | 18+ (TRUE/FALSE)",
+          "default": "FALSE"
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_10.user_name",
+          "type": "text",
+          "desc": "Stream 10 | Username",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_10.game_name",
+          "type": "text",
+          "desc": "Stream 10 | Spiel",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_10.title",
+          "type": "text",
+          "desc": "Stream 10 | Titel",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_10.viewer_count",
+          "type": "text",
+          "desc": "Stream 10 | Zuschauer",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_10.is_live",
+          "type": "text",
+          "desc": "Stream 10 | Live (TRUE/FALSE)",
+          "default": "FALSE"
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_10.uptime",
+          "type": "text",
+          "desc": "Stream 10 | Laufzeit",
+          "default": ""
+        },
+        {
+          "id": "odin23x.walhalla_twitch_stream_monitor.state.slot_10.is_mature",
+          "type": "text",
+          "desc": "Stream 10 | 18+ (TRUE/FALSE)",
+          "default": "FALSE"
+        }
+      ]
+    }
+  ]
+}
