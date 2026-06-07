@@ -1,0 +1,1128 @@
+{
+  "sdk": 6,
+  "version": 160,
+  "name": "Twitch Stream Monitor",
+  "id": "gitago.tw_stream_monitor",
+  "configuration": {
+    "colorDark": "#25274c",
+    "colorLight": "#707ab5"
+  },
+  "plugin_start_cmd_windows": "%TP_PLUGIN_FOLDER%TwitchStreamMonitor\\TwitchStreamMonitor.exe",
+  "plugin_start_cmd_linux": "sh %TP_PLUGIN_FOLDER%TwitchStreamMonitor//start.sh TwitchStreamMonitor",
+  "plugin_start_cmd_mac": "sh %TP_PLUGIN_FOLDER%TwitchStreamMonitor//start.sh TwitchStreamMonitor",
+  "categories": [
+    {
+      "id": "gitago.tw_stream_monitor.main",
+      "name": "SM | Twitch Stream Monitor",
+      "actions": [
+        {
+          "id": "gitago.tw_stream_monitor.act.check_raidlist",
+          "name": "Manually Check Raid / Host List",
+          "prefix": "SM | Twitch Stream Monitor",
+          "type": "communicate",
+          "format": "Manually Check Raid / Host List",
+          "description": "You can enable automatic checking in the Plugin Settings",
+          "tryInline": true,
+          "data": [
+            {
+              "id": "gitago.tw_stream_monitor.act.raidlist",
+              "type": "text",
+              "label": "nullll",
+              "default": ""
+            }
+          ]
+        },
+        {
+          "id": "gitago.tw_stream_monitor.act.manual_update",
+          "name": "Force Refresh State Updates",
+          "prefix": "SM | Twitch Stream Monitor",
+          "type": "communicate",
+          "format": "Force Refresh State Updates",
+          "description": "Used to force an state update",
+          "tryInline": true,
+          "data": [
+            {
+              "id": "gitago.tw_stream_monitor.act.raidlistfiller",
+              "type": "text",
+              "label": "nullll",
+              "default": ""
+            }
+          ]
+        },
+
+        {
+          "id": "gitago.tw_stream_monitor.act.open_raidlist",
+          "name": "Open Raidlist",
+          "prefix": "SM | Open Raidlist",
+          "type": "communicate",
+          "format": "Open and Edit Raid List Text File",
+          "description": "",
+          "tryInline": true,
+          "data": [
+            {
+              "id": "gitago.tw_stream_monitor.act.open_raidlistfillers",
+              "type": "text",
+              "label": "nullll",
+              "default": ""
+            }
+          ]
+        },
+        {
+          "id": "gitago.tw_stream_monitor.act.toggle_autoupdate",
+          "name": "Toggle Auto Update",
+          "prefix": "SM | Toggle Auto Update",
+          "type": "communicate",
+          "format": "Turn Auto-Update {$gitago.tw_stream_monitor.act.toggle_autoupdate.choice$} ",
+          "description": "",
+          "tryInline": true,
+          "data": [
+            {
+              "id": "gitago.tw_stream_monitor.act.toggle_autoupdate.choice",
+              "type": "choice",
+              "label": "nullll",
+              "default": "ON",
+              "valueChoices": [
+                "ON",
+                "OFF"
+              ]
+              
+            }
+          ]
+        }
+      ],
+      "states": [
+          {
+              "id": "gitago.tw_stream_monitor.state.raidcheck.Channels_Online",
+              "type": "text",
+              "desc": "SM | --- Total Channels Online",
+              "default": ""
+            },
+            {
+              "id": "gitago.tw_stream_monitor.state.raidcheck.Total_Raid_List",
+              "type": "text",
+              "desc": "SM | --- Total Channels",
+              "default": ""
+            },
+            {
+              "id": "gitago.tw_stream_monitor.state.raidcheck.AutoUpdate_Status",
+              "type": "text",
+              "desc": "SM | --- Auto Update Status (TRUE/FALSE)",
+              "default": ""
+            },
+            {
+              "id": "gitago.tw_stream_monitor.state.raidcheck.AutoUpdate_Switch",
+              "type": "text",
+              "desc": "SM | --- Auto Update Switch (ON/OFF)",
+              "default": ""
+            },
+            {
+              "id": "gitago.tw_stream_monitor.state.raidcheck.AutoUpdate_TIMELEFT",
+              "type": "text",
+              "desc": "SM | --- Auto Update Time Left",
+              "default": ""
+            }
+      ],
+      "events": []
+  },
+  {
+    "id": "gitago.tw_stream_monitor.Raidcheck_1",
+    "name": "SM | Raid #1",
+    "actions": [],
+    "states": [
+        {
+            "id": "gitago.tw_stream_monitor.state.raidcheck_1.user_name",
+            "type": "text",
+            "desc": "SM | Raid #1: User Name",
+            "default": ""
+          },
+          {
+            "id": "gitago.tw_stream_monitor.state.raidcheck_1.game_name",
+            "type": "text",
+            "desc": "SM | Raid #1: Game Name",
+            "default": ""
+          },
+          {
+            "id": "gitago.tw_stream_monitor.state.raidcheck_1.is_mature",
+            "type": "text",
+            "desc": "SM | Raid #1: is_mature?",
+            "default": ""
+          },
+          {
+            "id": "gitago.tw_stream_monitor.state.raidcheck_1.title",
+            "type": "text",
+            "desc": "SM | Raid #1: Title",
+            "default": ""
+          },
+          {
+            "id": "gitago.tw_stream_monitor.state.raidcheck_1.viewer_count",
+            "type": "text",
+            "desc": "SM | Raid #1: Viewer Count",
+            "default": ""
+          },
+          {
+            "id": "gitago.tw_stream_monitor.state.raidcheck_1.livetime",
+            "type": "text",
+            "desc": "SM | Raid #1 Live Time",
+            "default": ""
+          },
+          {
+            "id": "gitago.tw_stream_monitor.state.raidcheck_1.live_thumb",
+            "type": "text",
+            "desc": "SM | Raid #1 Live Thumbnail",
+            "default": ""
+          },
+          {
+            "id": "gitago.tw_stream_monitor.state.raidcheck_1.user_thumb",
+            "type": "text",
+            "desc": "SM | Raid #1 User Thumbnail",
+            "default": ""
+          },
+          {
+            "id": "gitago.tw_stream_monitor.state.raidcheck_1.game_thumb",
+            "type": "text",
+            "desc": "SM | Raid #1 Game Thumbnail",
+            "default": ""
+          }
+
+    ],
+    "events": []
+},
+{
+  "id": "gitago.tw_stream_monitor.raidcheck_2",
+  "name": "SM | Raid #2",
+  "actions": [],
+  "states": [
+      {
+          "id": "gitago.tw_stream_monitor.state.raidcheck_2.user_name",
+          "type": "text",
+          "desc": "SM | Raid #2: User Name",
+          "default": ""
+        },
+        {
+          "id": "gitago.tw_stream_monitor.state.raidcheck_2.game_name",
+          "type": "text",
+          "desc": "SM | Raid #2: Game Name",
+          "default": ""
+        },
+        {
+          "id": "gitago.tw_stream_monitor.state.raidcheck_2.is_mature",
+          "type": "text",
+          "desc": "SM | Raid #2: is_mature?",
+          "default": ""
+        },
+        {
+          "id": "gitago.tw_stream_monitor.state.raidcheck_2.title",
+          "type": "text",
+          "desc": "SM | Raid #2: Title",
+          "default": ""
+        },
+        {
+          "id": "gitago.tw_stream_monitor.state.raidcheck_2.viewer_count",
+          "type": "text",
+          "desc": "SM | Raid #2: Viewer Count",
+          "default": ""
+        },
+       {
+       "id": "gitago.tw_stream_monitor.state.raidcheck_2.livetime",
+       "type": "text",
+       "desc": "SM | Raid #2 Live Time",
+       "default": ""
+       },
+       {
+       "id": "gitago.tw_stream_monitor.state.raidcheck_2.live_thumb",
+       "type": "text",
+       "desc": "SM | Raid #2 Live Thumbnail",
+       "default": ""
+       },
+       {
+       "id": "gitago.tw_stream_monitor.state.raidcheck_2.user_thumb",
+       "type": "text",
+       "desc": "SM | Raid #2 User Thumbnail",
+       "default": ""
+       },
+       {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_2.game_thumb",
+        "type": "text",
+        "desc": "SM | Raid #2 Game Thumbnail",
+        "default": ""
+      }
+       ],
+    "events": []
+   },
+   {
+  "id": "gitago.tw_stream_monitor.raidcheck_3",
+  "name": "SM | Raid #3",
+  "actions": [],
+  "states": [
+      {
+          "id": "gitago.tw_stream_monitor.state.raidcheck_3.user_name",
+          "type": "text",
+          "desc": "SM | Raid #3: User Name",
+          "default": ""
+        },
+        {
+          "id": "gitago.tw_stream_monitor.state.raidcheck_3.game_name",
+          "type": "text",
+          "desc": "SM | Raid #3: Game Name",
+          "default": ""
+        },
+        {
+          "id": "gitago.tw_stream_monitor.state.raidcheck_3.is_mature",
+          "type": "text",
+          "desc": "SM | Raid #3: is_mature?",
+          "default": ""
+        },
+        {
+          "id": "gitago.tw_stream_monitor.state.raidcheck_3.title",
+          "type": "text",
+          "desc": "SM | Raid #3: Title",
+          "default": ""
+        },
+        {
+          "id": "gitago.tw_stream_monitor.state.raidcheck_3.viewer_count",
+          "type": "text",
+          "desc": "SM | Raid #3: Viewer Count",
+          "default": ""
+        },
+        {
+          "id": "gitago.tw_stream_monitor.state.raidcheck_3.livetime",
+          "type": "text",
+          "desc": "SM | Raid #3 Live Time",
+          "default": ""
+        },
+    {
+    "id": "gitago.tw_stream_monitor.state.raidcheck_3.live_thumb",
+    "type": "text",
+    "desc": "SM | Raid #3 Live Thumbnail",
+    "default": ""
+    },
+    {
+    "id": "gitago.tw_stream_monitor.state.raidcheck_3.user_thumb",
+    "type": "text",
+    "desc": "SM | Raid #3 User Thumbnail",
+    "default": ""
+    },
+    {
+      "id": "gitago.tw_stream_monitor.state.raidcheck_3.game_thumb",
+      "type": "text",
+      "desc": "SM | Raid #3 Game Thumbnail",
+      "default": ""
+    }
+  
+    ],
+  "events": []
+  },
+  {
+"id": "gitago.tw_stream_monitor.raidcheck_4",
+"name": "SM | Raid #4",
+"actions": [],
+"states": [
+    {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_4.user_name",
+        "type": "text",
+        "desc": "SM | Raid #4: User Name",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_4.game_name",
+        "type": "text",
+        "desc": "SM | Raid #4: Game Name",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_4.is_mature",
+        "type": "text",
+        "desc": "SM | Raid #4: is_mature?",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_4.title",
+        "type": "text",
+        "desc": "SM | Raid #4: Title",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_4.viewer_count",
+        "type": "text",
+        "desc": "SM | Raid #4: Viewer Count",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_4.livetime",
+        "type": "text",
+        "desc": "SM | Raid #4 Live Time",
+        "default": ""
+      },
+  {
+  "id": "gitago.tw_stream_monitor.state.raidcheck_4.live_thumb",
+  "type": "text",
+  "desc": "SM | Raid #4 Live Thumbnail",
+  "default": ""
+  },
+  {
+  "id": "gitago.tw_stream_monitor.state.raidcheck_4.user_thumb",
+  "type": "text",
+  "desc": "SM | Raid #4 User Thumbnail",
+  "default": ""
+  },
+  {
+    "id": "gitago.tw_stream_monitor.state.raidcheck_4.game_thumb",
+    "type": "text",
+    "desc": "SM | Raid #4 Game Thumbnail",
+    "default": ""
+  }
+  
+],
+"events": []
+},
+
+{
+"id": "gitago.tw_stream_monitor.raidcheck_5",
+"name": "SM | Raid #5",
+"actions": [],
+"states": [
+    {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_5.user_name",
+        "type": "text",
+        "desc": "SM | Raid #5: User Name",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_5.game_name",
+        "type": "text",
+        "desc": "SM | Raid #5: Game Name",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_5.is_mature",
+        "type": "text",
+        "desc": "SM | Raid #5: is_mature?",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_5.title",
+        "type": "text",
+        "desc": "SM | Raid #5: Title",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_5.viewer_count",
+        "type": "text",
+        "desc": "SM | Raid #5: Viewer Count",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_5.livetime",
+        "type": "text",
+        "desc": "SM | Raid #5 Live Time",
+        "default": ""
+      },
+  {
+  "id": "gitago.tw_stream_monitor.state.raidcheck_5.live_thumb",
+  "type": "text",
+  "desc": "SM | Raid #5 Live Thumbnail",
+  "default": ""
+  },
+  {
+  "id": "gitago.tw_stream_monitor.state.raidcheck_5.user_thumb",
+  "type": "text",
+  "desc": "SM | Raid #5 User Thumbnail",
+  "default": ""
+  },
+  {
+    "id": "gitago.tw_stream_monitor.state.raidcheck_5.game_thumb",
+    "type": "text",
+    "desc": "SM | Raid #5 Game Thumbnail",
+    "default": ""
+  }
+  
+],
+"events": []
+},
+
+
+{
+"id": "gitago.tw_stream_monitor.raidcheck_6",
+"name": "SM | Raid #6",
+"actions": [],
+"states": [
+    {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_6.user_name",
+        "type": "text",
+        "desc": "SM | Raid #6: User Name",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_6.game_name",
+        "type": "text",
+        "desc": "SM | Raid #6: Game Name",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_6.is_mature",
+        "type": "text",
+        "desc": "SM | Raid #6: is_mature?",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_6.title",
+        "type": "text",
+        "desc": "SM | Raid #6: Title",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_6.viewer_count",
+        "type": "text",
+        "desc": "SM | Raid #6: Viewer Count",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_6.livetime",
+        "type": "text",
+        "desc": "SM | Raid #6 Live Time",
+        "default": ""
+      },
+  {
+  "id": "gitago.tw_stream_monitor.state.raidcheck_6.live_thumb",
+  "type": "text",
+  "desc": "SM | Raid #6 Live Thumbnail",
+  "default": ""
+  },
+  {
+  "id": "gitago.tw_stream_monitor.state.raidcheck_6.user_thumb",
+  "type": "text",
+  "desc": "SM | Raid #6 User Thumbnail",
+  "default": ""
+  },
+  {
+    "id": "gitago.tw_stream_monitor.state.raidcheck_6.game_thumb",
+    "type": "text",
+    "desc": "SM | Raid #6 Game Thumbnail",
+    "default": ""
+  }
+  
+],
+"events": []
+},
+
+
+{
+"id": "gitago.tw_stream_monitor.raidcheck_7",
+"name": "SM | Raid #7",
+"actions": [],
+"states": [
+    {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_7.user_name",
+        "type": "text",
+        "desc": "SM | Raid #7: User Name",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_7.game_name",
+        "type": "text",
+        "desc": "SM | Raid #7: Game Name",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_7.is_mature",
+        "type": "text",
+        "desc": "SM | Raid #7: is_mature?",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_7.title",
+        "type": "text",
+        "desc": "SM | Raid #7: Title",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_7.viewer_count",
+        "type": "text",
+        "desc": "SM | Raid #7: Viewer Count",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_7.livetime",
+        "type": "text",
+        "desc": "SM | Raid #7 Live Time",
+        "default": ""
+      },
+  {
+  "id": "gitago.tw_stream_monitor.state.raidcheck_7.live_thumb",
+  "type": "text",
+  "desc": "SM | Raid #7 Live Thumbnail",
+  "default": ""
+  },
+  {
+  "id": "gitago.tw_stream_monitor.state.raidcheck_7.user_thumb",
+  "type": "text",
+  "desc": "SM | Raid #7 User Thumbnail",
+  "default": ""
+  },
+  {
+    "id": "gitago.tw_stream_monitor.state.raidcheck_7.game_thumb",
+    "type": "text",
+    "desc": "SM | Raid #7 Game Thumbnail",
+    "default": ""
+  }
+  
+],
+"events": []
+},
+
+
+{
+"id": "gitago.tw_stream_monitor.raidcheck_8",
+"name": "SM | Raid #8",
+"actions": [],
+"states": [
+    {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_8.user_name",
+        "type": "text",
+        "desc": "SM | Raid #8: User Name",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_8.game_name",
+        "type": "text",
+        "desc": "SM | Raid #8: Game Name",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_8.is_mature",
+        "type": "text",
+        "desc": "SM | Raid #8: is_mature?",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_8.title",
+        "type": "text",
+        "desc": "SM | Raid #8: Title",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_8.viewer_count",
+        "type": "text",
+        "desc": "SM | Raid #8: Viewer Count",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_8.livetime",
+        "type": "text",
+        "desc": "SM | Raid #8 Live Time",
+        "default": ""
+      },
+  {
+  "id": "gitago.tw_stream_monitor.state.raidcheck_8.live_thumb",
+  "type": "text",
+  "desc": "SM | Raid #8 Live Thumbnail",
+  "default": ""
+  },
+  {
+  "id": "gitago.tw_stream_monitor.state.raidcheck_8.user_thumb",
+  "type": "text",
+  "desc": "SM | Raid #8 User Thumbnail",
+  "default": ""
+  },
+  {
+    "id": "gitago.tw_stream_monitor.state.raidcheck_8.game_thumb",
+    "type": "text",
+    "desc": "SM | Raid #8 Game Thumbnail",
+    "default": ""
+  }
+  
+],
+"events": []
+},
+
+
+{
+"id": "gitago.tw_stream_monitor.raidcheck_9",
+"name": "SM | Raid #9",
+"actions": [],
+"states": [
+    {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_9.user_name",
+        "type": "text",
+        "desc": "SM | Raid #9: User Name",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_9.game_name",
+        "type": "text",
+        "desc": "SM | Raid #9: Game Name",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_9.is_mature",
+        "type": "text",
+        "desc": "SM | Raid #9: is_mature?",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_9.title",
+        "type": "text",
+        "desc": "SM | Raid #9: Title",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_9.viewer_count",
+        "type": "text",
+        "desc": "SM | Raid #9: Viewer Count",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_9.livetime",
+        "type": "text",
+        "desc": "SM | Raid #9 Live Time",
+        "default": ""
+      },
+  {
+  "id": "gitago.tw_stream_monitor.state.raidcheck_9.live_thumb",
+  "type": "text",
+  "desc": "SM | Raid #9 Live Thumbnail",
+  "default": ""
+  },
+  {
+  "id": "gitago.tw_stream_monitor.state.raidcheck_9.user_thumb",
+  "type": "text",
+  "desc": "SM | Raid #9 User Thumbnail",
+  "default": ""
+  },
+  {
+    "id": "gitago.tw_stream_monitor.state.raidcheck_9.game_thumb",
+    "type": "text",
+    "desc": "SM | Raid #9 Game Thumbnail",
+    "default": ""
+  }
+  
+],
+"events": []
+},
+
+
+{
+"id": "gitago.tw_stream_monitor.raidcheck_10",
+"name": "SM | Raid #10",
+"actions": [],
+"states": [
+    {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_10.user_name",
+        "type": "text",
+        "desc": "SM | Raid #10: User Name",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_10.game_name",
+        "type": "text",
+        "desc": "SM | Raid #10: Game Name",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_10.is_mature",
+        "type": "text",
+        "desc": "SM | Raid #10: is_mature?",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_10.title",
+        "type": "text",
+        "desc": "SM | Raid #10: Title",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_10.viewer_count",
+        "type": "text",
+        "desc": "SM | Raid #10: Viewer Count",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_10.livetime",
+        "type": "text",
+        "desc": "SM | Raid #10 Live Time",
+        "default": ""
+      },
+  {
+  "id": "gitago.tw_stream_monitor.state.raidcheck_10.live_thumb",
+  "type": "text",
+  "desc": "SM | Raid #10 Live Thumbnail",
+  "default": ""
+  },
+  {
+  "id": "gitago.tw_stream_monitor.state.raidcheck_10.user_thumb",
+  "type": "text",
+  "desc": "SM | Raid #10 User Thumbnail",
+  "default": ""
+  },
+  {
+    "id": "gitago.tw_stream_monitor.state.raidcheck_10.game_thumb",
+    "type": "text",
+    "desc": "SM | Raid #10 Game Thumbnail",
+    "default": ""
+  }
+  
+],
+"events": []
+},
+
+{
+"id": "gitago.tw_stream_monitor.raidcheck_11",
+"name": "SM | Raid #11",
+"actions": [],
+"states": [
+    {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_11.user_name",
+        "type": "text",
+        "desc": "SM | Raid #11: User Name",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_11.game_name",
+        "type": "text",
+        "desc": "SM | Raid #11: Game Name",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_11.is_mature",
+        "type": "text",
+        "desc": "SM | Raid #11: is_mature?",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_11.title",
+        "type": "text",
+        "desc": "SM | Raid #11: Title",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_11.viewer_count",
+        "type": "text",
+        "desc": "SM | Raid #11: Viewer Count",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_11.livetime",
+        "type": "text",
+        "desc": "SM | Raid #11 Live Time",
+        "default": ""
+      },
+  {
+  "id": "gitago.tw_stream_monitor.state.raidcheck_11.live_thumb",
+  "type": "text",
+  "desc": "SM | Raid #11 Live Thumbnail",
+  "default": ""
+  },
+  {
+  "id": "gitago.tw_stream_monitor.state.raidcheck_11.user_thumb",
+  "type": "text",
+  "desc": "SM | Raid #11 User Thumbnail",
+  "default": ""
+  },
+  {
+    "id": "gitago.tw_stream_monitor.state.raidcheck_11.game_thumb",
+    "type": "text",
+    "desc": "SM | Raid #11 Game Thumbnail",
+    "default": ""
+  }
+  
+],
+"events": []
+},
+
+{
+"id": "gitago.tw_stream_monitor.raidcheck_12",
+"name": "SM | Raid #12",
+"actions": [],
+"states": [
+    {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_12.user_name",
+        "type": "text",
+        "desc": "SM | Raid #12: User Name",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_12.game_name",
+        "type": "text",
+        "desc": "SM | Raid #12: Game Name",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_12.is_mature",
+        "type": "text",
+        "desc": "SM | Raid #12: is_mature?",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_12.title",
+        "type": "text",
+        "desc": "SM | Raid #12: Title",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_12.viewer_count",
+        "type": "text",
+        "desc": "SM | Raid #12: Viewer Count",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_12.livetime",
+        "type": "text",
+        "desc": "SM | Raid #12 Live Time",
+        "default": ""
+      },
+  {
+  "id": "gitago.tw_stream_monitor.state.raidcheck_12.live_thumb",
+  "type": "text",
+  "desc": "SM | Raid #12 Live Thumbnail",
+  "default": ""
+  },
+  {
+  "id": "gitago.tw_stream_monitor.state.raidcheck_12.user_thumb",
+  "type": "text",
+  "desc": "SM | Raid #12 User Thumbnail",
+  "default": ""
+  },
+  {
+    "id": "gitago.tw_stream_monitor.state.raidcheck_12.game_thumb",
+    "type": "text",
+    "desc": "SM | Raid #12 Game Thumbnail",
+    "default": ""
+  }
+  
+],
+"events": []
+},
+
+
+{
+"id": "gitago.tw_stream_monitor.raidcheck_13",
+"name": "SM | Raid #13",
+"actions": [],
+"states": [
+    {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_13.user_name",
+        "type": "text",
+        "desc": "SM | Raid #13: User Name",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_13.game_name",
+        "type": "text",
+        "desc": "SM | Raid #13: Game Name",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_13.is_mature",
+        "type": "text",
+        "desc": "SM | Raid #13: is_mature?",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_13.title",
+        "type": "text",
+        "desc": "SM | Raid #13: Title",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_13.viewer_count",
+        "type": "text",
+        "desc": "SM | Raid #13: Viewer Count",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_13.livetime",
+        "type": "text",
+        "desc": "SM | Raid #13 Live Time",
+        "default": ""
+      },
+  {
+  "id": "gitago.tw_stream_monitor.state.raidcheck_13.live_thumb",
+  "type": "text",
+  "desc": "SM | Raid #13 Live Thumbnail",
+  "default": ""
+  },
+  {
+  "id": "gitago.tw_stream_monitor.state.raidcheck_13.user_thumb",
+  "type": "text",
+  "desc": "SM | Raid #13 User Thumbnail",
+  "default": ""
+  },
+  {
+    "id": "gitago.tw_stream_monitor.state.raidcheck_13.game_thumb",
+    "type": "text",
+    "desc": "SM | Raid #13 Game Thumbnail",
+    "default": ""
+  }
+  
+],
+"events": []
+},
+
+
+{
+"id": "gitago.tw_stream_monitor.raidcheck_14",
+"name": "SM | Raid #14",
+"actions": [],
+"states": [
+    {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_14.user_name",
+        "type": "text",
+        "desc": "SM | Raid #14: User Name",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_14.game_name",
+        "type": "text",
+        "desc": "SM | Raid #14: Game Name",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_14.is_mature",
+        "type": "text",
+        "desc": "SM | Raid #14: is_mature?",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_14.title",
+        "type": "text",
+        "desc": "SM | Raid #14: Title",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_14.viewer_count",
+        "type": "text",
+        "desc": "SM | Raid #14: Viewer Count",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_14.livetime",
+        "type": "text",
+        "desc": "SM | Raid #14 Live Time",
+        "default": ""
+      },
+  {
+  "id": "gitago.tw_stream_monitor.state.raidcheck_14.live_thumb",
+  "type": "text",
+  "desc": "SM | Raid #14 Live Thumbnail",
+  "default": ""
+  },
+  {
+  "id": "gitago.tw_stream_monitor.state.raidcheck_14.user_thumb",
+  "type": "text",
+  "desc": "SM | Raid #14 User Thumbnail",
+  "default": ""
+  },
+  {
+    "id": "gitago.tw_stream_monitor.state.raidcheck_14.game_thumb",
+    "type": "text",
+    "desc": "SM | Raid #14 Game Thumbnail",
+    "default": ""
+  }
+  
+],
+"events": []
+},
+
+
+{
+"id": "gitago.tw_stream_monitor.raidcheck_15",
+"name": "SM | Raid #15",
+"actions": [],
+"states": [
+    {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_15.user_name",
+        "type": "text",
+        "desc": "SM | Raid #15: User Name",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_15.game_name",
+        "type": "text",
+        "desc": "SM | Raid #15: Game Name",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_15.is_mature",
+        "type": "text",
+        "desc": "SM | Raid #15: is_mature?",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_15.title",
+        "type": "text",
+        "desc": "SM | Raid #15: Title",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_15.viewer_count",
+        "type": "text",
+        "desc": "SM | Raid #15: Viewer Count",
+        "default": ""
+      },
+      {
+        "id": "gitago.tw_stream_monitor.state.raidcheck_15.livetime",
+        "type": "text",
+        "desc": "SM | Raid #15 Live Time",
+        "default": ""
+      },
+  {
+  "id": "gitago.tw_stream_monitor.state.raidcheck_15.live_thumb",
+  "type": "text",
+  "desc": "SM | Raid #15 Live Thumbnail",
+  "default": ""
+  },
+  {
+  "id": "gitago.tw_stream_monitor.state.raidcheck_15.user_thumb",
+  "type": "text",
+  "desc": "SM | Raid #15 User Thumbnail",
+  "default": ""
+  },
+  {
+    "id": "gitago.tw_stream_monitor.state.raidcheck_15.game_thumb",
+    "type": "text",
+    "desc": "SM | Raid #15 Game Thumbnail",
+    "default": ""
+  }
+  
+],
+"events": []
+}
+
+
+
+  ],
+  "settings": [
+    {
+      "name": "Auto-Update",
+      "type": "text",
+      "default": "OFF",
+      "readOnly": false
+    },
+    {
+      "name": "Auto-Update Seconds",
+      "type": "number",
+      "default": "60",
+      "minValue": 60,
+      "readOnly": false
+    },
+    {
+      "name": "Live Preview Size (Example: 250x140)",
+      "type": "text",
+      "default": "250x140",
+      "readOnly": false
+    },
+    {
+      "name": "Game Art Size (Example: 128x128)",
+      "type": "text",
+      "default": "128x128",
+      "readOnly": false
+    },
+    {
+    "name": "Live Image Preview Refresh Rate (Seconds)",
+    "type": "number",
+    "default": "240",
+    "minValue": 30,
+    "readOnly": false
+    }
+  ]
+}
