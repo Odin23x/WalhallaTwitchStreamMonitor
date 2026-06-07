@@ -1,0 +1,12 @@
+# Walhalla Twitch Stream Monitor - Streamers Liste
+# Einen Twitch-Login pro Zeile eintragen (lowercase)
+# Zeilen die mit # beginnen werden ignoriert
+# Leerzeilen werden ignoriert
+# Maximale Anzahl wird durch "Max Slots" in den Plugin-Einstellungen begrenzt
+#
+# Beispiele:
+# xqc
+# pokimane
+# summit1g
+#
+# Hier deine Streamer eintragen:
