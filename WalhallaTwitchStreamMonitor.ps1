@@ -256,7 +256,7 @@ function Run-Check {
                 Set-State "$pfx.viewer_count" ([string]$stream.viewer_count)
                 Set-State "$pfx.is_live"      'TRUE'
                 Set-State "$pfx.uptime"       $uptime
-                Set-State "$pfx.is_mature"    (if ($stream.is_mature) { 'TRUE' } else { 'FALSE' })
+                if ($stream.is_mature) { Set-State "$pfx.is_mature"    'TRUE' } else { Set-State "$pfx.is_mature"    'FALSE' }
             } else {
                 Set-State "$pfx.user_name"    $login
                 Set-State "$pfx.game_name"    ''
@@ -299,7 +299,7 @@ function Handle-Message {
     switch ([string]$msg.type) {
         'info' {
             if ($null -ne $msg.settings) { Parse-SettingsArray -Values $msg.settings }
-            Set-State "$PluginId.state.summary.autoupdate" (if ($script:AutoUpdate) { 'AN' } else { 'AUS' })
+            if ($script:AutoUpdate) { Set-State "$PluginId.state.summary.autoupdate" 'AN' } else { Set-State "$PluginId.state.summary.autoupdate" 'AUS' }
             $script:ForceRefresh = $true
         }
         'settings' {
@@ -312,7 +312,7 @@ function Handle-Message {
                 "$PluginId.act.refresh"         { $script:ForceRefresh = $true }
                 "$PluginId.act.toggle_autoupdate" {
                     $script:AutoUpdate = -not $script:AutoUpdate
-                    Set-State "$PluginId.state.summary.autoupdate" (if ($script:AutoUpdate) { 'AN' } else { 'AUS' })
+                    if ($script:AutoUpdate) { Set-State "$PluginId.state.summary.autoupdate" 'AN' } else { Set-State "$PluginId.state.summary.autoupdate" 'AUS' }
                     Write-Log "AutoUpdate: $(if ($script:AutoUpdate) { 'AN' } else { 'AUS' })"
                 }
                 "$PluginId.act.open_file" { Open-StreamersFile }
